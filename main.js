@@ -10,6 +10,7 @@ function creatMainWindow() {
     title: "ctlac-gui",
     width: 800,
     height: 500,
+    resizable: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -22,33 +23,28 @@ function creatMainWindow() {
 app.on("ready", creatMainWindow);
 
 ipcMain.on("checkurl:url", (e, data) => {
-  console.log("checking:");
-  console.log(data);
-
-  console.log(data.url);
-
-  getContentFromUrl(data.url)
+  const url = data.url;
+  
+  getContentFromUrl(url)
     .then((html) => {
-      console.log(" reading content from: " + data.url);
       return getHeadersFromUrls(findLinksInHtml(html));
     })
     .then((json) => {
-      console.log(" printing result from: " + data.url);
       mainWindow.webContents.send("checkurl:result", {
-        html: printHtml(json, data.url),
+        html: printHtml(json, url),
       });
     })
-    .catch((err) => {
-      console.log("/ error: " + err);
+    .catch((err) => {      
       mainWindow.webContents.send("checkurl:result", {
-        html: renderHtmlDocument("", data.url, err),
+        html: renderHtmlDocument("", url, err),
       });
     });
 });
 
 const cacheHeaderNames = ["cache-control", "via", "x-cache"];
-const tableHeaderColumns = ["url", "msg"];
+const tableHeaderColumns = ["url"];
 tableHeaderColumns.push(...cacheHeaderNames);
+tableHeaderColumns.push("msg");
 
 function getContentFromUrl(url) {
   return new Promise((resolve, reject) => {
@@ -82,8 +78,7 @@ function getHeadersFromUrl(url) {
         resolve({ url, headers: res.headers.raw(), msg: "" });
       })
       .catch((err) => {
-        console.error(err);
-        resolve({ url, headers: {}, msg: err });
+        resolve({ url, headers: {}, msg: err.toString() });
       });
   });
 }
@@ -92,15 +87,14 @@ function printHtml(json, requestedUrl) {
   let tableRows = renderTableRow(tableHeaderColumns, "th");
 
   json.forEach((element) => {
-    const values = [element.url, element.msg];
-
+    const values = [element.url];
     cacheHeaderNames.forEach((cacheHeaderName) => {
       values.push(
-        element.headers[cacheHeaderName]
-          ? JSON.stringify(element.headers[cacheHeaderName])
-          : ""
+        element.headers[cacheHeaderName] ? JSON.stringify(element.headers[cacheHeaderName]) : ""
       );
     });
+
+    values.push(element.msg);
 
     tableRows += renderTableRow(values, "td");
   });
@@ -108,15 +102,14 @@ function printHtml(json, requestedUrl) {
   return renderHtmlDocument(tableRows, requestedUrl);
 }
 
-function renderTableRow(values, htmlTag) {
+function renderTableRow(values, t) {
   const str = values
-    .map((value) => "<" + htmlTag + ">" + value + "</" + htmlTag + ">")
+    .map((value) => `<${t}>${value}</${t}>`)
     .join("");
   return `<tr>${str}</tr>`;
 }
 
 function renderHtmlDocument(bodyHtml, url, errorMsg) {
-  
   const errorDiv = errorMsg ? "<div><b>" + errorMsg + "</b></div>" : "";
   const bodyHtmlDiv = bodyHtml
     ? `<div><table cellpadding="3" width="100%">${bodyHtml}</table> </div>`
@@ -125,8 +118,6 @@ function renderHtmlDocument(bodyHtml, url, errorMsg) {
     ${errorDiv}
 
     ${bodyHtmlDiv}
-
-
 `;
   return baseHtml;
 }

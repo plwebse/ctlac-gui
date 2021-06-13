@@ -1,0 +1,60 @@
+fieldset {
+  border: 1px solid #ccc;
+}
+
+fieldset > legend {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20pt;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 12pt;
+}
+
+table th {
+  padding: 5px;
+  background-color: #efefef;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+table td {
+  border: 1px solid #ccc;
+  padding: 2px;
+  margin: 5px;
+  word-break: break-all;
+}
+
+table tr:nth-child(odd) {
+  background-color: #efefef;
+}
+
+input {
+  width: 99%;
+  padding: 5px;
+  margin: 5px;
+}
+
+input[type="submit"] {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+div#wrapper {
+  width: 90%;
+  margin: auto;
+}
+
+div#wrapper > div {
+  margin: 10px 0;
+}
+
+div#wrapper > div > b {
+  color: #ff0000;
+  margin: 20px 10px;
+}
