@@ -1,0 +1,31 @@
+{
+  "name": "ctlac-gui",
+  "productName": "check-that-links-are-cached",
+  "version": "1.0.0",
+  "description": "Check that links are cached with gui",
+  "main": "main.js",
+  "scripts": {
+    "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
+    "dev": "nodemon --exec ELECTRON_DISABLE_SECURITY_WARNINGS=true elecron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plwebse/ctlac-gui.git"
+  },
+  "author": "Peter Lindblom",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plwebse/ctlac-gui/issues"
+  },
+  "homepage": "https://github.com/plwebse/ctlac-gui#readme",
+  "devDependencies": {
+    "electron": "^13.1.2",
+    "electron-packager": "^15.2.0",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "jsdom": "^16.4.0",
+    "node-fetch": "^2.6.1"
+  }
+}

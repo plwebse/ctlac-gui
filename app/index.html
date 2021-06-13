@@ -1,0 +1,109 @@
+<html lang="sv">
+    <head>
+        <title>Check that are links are cached</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            fieldset {
+                border: 1px solid #ccc;
+            }
+
+            fieldset>legend {
+                text-transform:uppercase;
+                font-weight: bold;
+                font-size:20pt;
+            } 
+
+            table {
+                border: 1px solid #ccc;
+                border-collapse: collapse;
+                border-radius: 5px;
+                width:100%;        
+                
+            }
+
+            table th, table td {
+                border: 1px solid #ccc;
+                padding:5px;
+                margin:5px;               
+            }
+
+            table tr:nth-child(odd) {
+                background-color: #efefef;  
+            }
+
+            table th {
+                background-color: #efefef;        
+                text-transform:uppercase;
+                text-align: left;
+            }    
+
+            input {
+                width:100%;
+                padding:5px;
+                margin:5px;               
+            }
+
+            input[type='submit'] {
+                text-transform:uppercase;
+                font-weight: bold;               
+            }
+
+            div#wrapper {
+                max-width:1200px;
+                margin:auto;
+                
+            }
+
+            div#wrapper > div {        
+                margin:10px 0;
+                overflow:hidden;        
+                overflow-x:auto;
+            }
+
+            div#wrapper > div > b {
+                color:#FF0000;
+                margin: 20px 10px;
+            }        
+
+        </style>
+    </head>
+    <body>
+    <div id="wrapper">
+        <form id="my-form">
+        <fieldset>
+            <legend>Check that links are cached</legend>
+            <input id="url" type="url" placeholder="url to check" />
+            <input type="checkbox" name="" />
+            <input type="submit" />
+        </fieldset>
+        </form>
+
+    
+
+    <div id="result">
+        
+    </div>
+
+    <script>
+        console.log("test 1");
+        const ipc = require("electron").ipcRenderer;
+        const form = document.getElementById("my-form");
+  
+        form.addEventListener("submit", function (e) {
+          const url = document.getElementById("url").value;
+          e.preventDefault();
+          ipc.send("checkurl:url", {
+            url,
+          });
+        });
+  
+        ipc.on("checkurl:result", (e, data) => {
+          console.log(data.html);
+          document.getElementById("result").innerHTML = data.html;
+        })
+      </script>
+
+  </body>
+</html>
