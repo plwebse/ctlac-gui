@@ -7,7 +7,11 @@
   "scripts": {
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
     "dev": "nodemon --exec ELECTRON_DISABLE_SECURITY_WARNINGS=true elecron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\"",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds",
+    "create-installer-mac": "electron-installer-dmg ./release-builds/check-that-links-are-cached-darwin-x64/check-that-links-are-cached.app check-that-links-are-cached --out=release-builds --overwrite "
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,7 @@
   "homepage": "https://github.com/plwebse/ctlac-gui#readme",
   "devDependencies": {
     "electron": "^13.1.2",
+    "electron-installer-dmg": "^3.0.0",
     "electron-packager": "^15.2.0",
     "nodemon": "^2.0.7"
   },
